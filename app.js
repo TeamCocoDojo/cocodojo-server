@@ -7,12 +7,15 @@ var express = require('express')
   , routes = require('./routes')
   , codeSession = require('./routes/code_session')
   , http = require('http')
-  , path = require('path');
+  , path = require('path')
+  , io = require("socket.io");
+
+var ot = require("ot");
 
 var app = express();
 
 // all environments
-app.set('port', process.env.PORT || 3000);
+app.set('port', process.env.PORT || 3333);
 app.set('views', __dirname + '/views');
 app.set('view engine', 'jade');
 app.use(express.favicon());
@@ -40,6 +43,27 @@ app.all('/:codeSessionId/create', codeSession.create);
 app.all('/:codeSessionId/sync', codeSession.sync);
 app.all('/:codeSessionId/destroy', codeSession.destroy);
 
-http.createServer(app).listen(app.get('port'), function(){
-  console.log('Express server listening on port ' + app.get('port'));
+
+//http.createServer(app).listen(app.get('port'), function(){
+//  console.log('Express server listening on port ' + app.get('port'));
+//});
+
+var editorServer = null;
+var io = require('socket.io').listen(app.get("port"));
+io.sockets.on('connection', function (socket) {
+
+  socket.emit('doneConnection', { message: 'hello' });
+
+  socket.on('create', function(data) {
+    console.log("############### On Create");
+    console.log(data);
+    editorServer = new ot.EditorSocketIOServer("", [], data.codeSessionId);
+    io.sockets.emit('doneCreate', "");
+  });
+
+  socket.on('join', function(data) {
+    console.log("@@@@@@@@@@@@@@@ On Join");
+    console.log(editorServer.docId);
+    editorServer.addClient(socket);
+  });
 });

@@ -97,6 +97,7 @@ exports.create = function(req, res) {
   var codeSessionId = req.params.codeSessionId;
   var newDoc = new doc(codeSessionId);
   docs[codeSessionId] = newDoc;
+  var editorServer = new ot.EditorSocketIOServer("", [], codeSessionId);
   res.end();
 };
 
