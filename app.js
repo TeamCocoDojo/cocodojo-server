@@ -47,6 +47,7 @@ app.all('/*', headerMiddleware);
 
 var editorServer = null;
 var io = require('socket.io').listen(app.get("port"));
+io.set('origins', '*');
 io.sockets.on('connection', function (socket) {
 
   socket.emit('doneConnection', { message: 'hello' });
