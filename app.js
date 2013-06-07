@@ -6,6 +6,7 @@
 var express = require('express')
   , routes = require('./routes')
   , codeSession = require('./routes/code_session')
+  , index = require("./routes/index")
   , http = require('http')
   , path = require('path')
   , io = require("socket.io");
@@ -38,10 +39,6 @@ var headerMiddleware = function(req, res, next) {
 }
 
 app.all('/*', headerMiddleware);
-
-app.all('/:codeSessionId/create', codeSession.create);
-app.all('/:codeSessionId/sync', codeSession.sync);
-app.all('/:codeSessionId/destroy', codeSession.destroy);
 
 
 //http.createServer(app).listen(app.get('port'), function(){
