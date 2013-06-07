@@ -38,15 +38,11 @@ cocodojoDB.prototype.updateOperation = function(codeSessionId, operation, callba
       callback(error);
     }
     else {
-      console.log("code session id= " + codeSessionId);
-      console.log("operations= " + operation);
-      console.log(codeSessionCollection);
       codeSessionCollection.update(
         {_id: codeSessionCollection.db.bson_serializer.ObjectID.createFromHexString(codeSessionId)},
         {"$push": {operations: operation}},
         function(error, codeSessionId){
           if (error) {
-            console.log("xxxxx");
             callback(error);
           }
           else {
