@@ -33,7 +33,6 @@ app.all('/:codeSessionId/destroy', codeSession.destroy);
 
 
 var headerMiddleware = function(req, res, next) {
-  console.log("I am here");
   res.header("Access-Control-Allow-Origin", "*");
   res.header("Access-Control-Allow-Headers", "X-Requested-With");
   next();

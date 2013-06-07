@@ -40,7 +40,7 @@ cocodojoDB.prototype.updateOperation = function(codeSessionId, operation, callba
     else {
       console.log("code session id= " + codeSessionId);
       console.log("operations= " + operation);
-      console.log(codeSessionCollection);
+      //console.log(codeSessionCollection);
       codeSessionCollection.update(
         {_id: codeSessionCollection.db.bson_serializer.ObjectID.createFromHexString(codeSessionId)},
         {"$push": {operations: operation}},
@@ -77,10 +77,16 @@ doc.prototype.receive = function(data) {
 exports.sync = function(req, res) {
   res.header("Access-Control-Allow-Origin", "*");
   res.header("Access-Control-Allow-Headers", "X-Requested-With");
-
+  console.log(req.method);
   var codeSessionId = req.params.codeSessionId;
   var revision = req.body.revision;
-  var operation = ot.TextOperation.fromJSON(JSON.parse(req.body.operation));
+  if(req.body.operation === undefined) {
+    res.end();
+    return;
+  };
+  
+  console.log("TYPE OF OPERATION: " + typeof req.body.operation);
+  var operation = ot.TextOperation.fromJSON(req.body.operation);
   console.log(revision);
   console.log("first time " + operation);
   docs[codeSessionId].receive({
