@@ -46,7 +46,6 @@ cocodojoDB.prototype.updateOperation = function(codeSessionId, operation, callba
         {"$push": {operations: operation}},
         function(error, codeSessionId){
           if (error) {
-            console.log("xxxxx");
             callback(error);
           }
           else {
@@ -66,8 +65,6 @@ var doc = function(codeSessionId){
 };
 
 doc.prototype.receive = function(data) {
-  console.log(data.operation + " before convert");
-
   var operation = this.server.receiveOperation(data.revision, data.operation);
   cocodojoDBObj.updateOperation(this.codeSessionId, operation, function() {
 
@@ -97,8 +94,6 @@ exports.sync = function(req, res) {
 };
 
 exports.create = function(req, res) {
-  res.header("Access-Control-Allow-Origin", "*");
-  res.header("Access-Control-Allow-Headers", "X-Requested-With");
   var codeSessionId = req.params.codeSessionId;
   var newDoc = new doc(codeSessionId);
   docs[codeSessionId] = newDoc;
