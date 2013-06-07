@@ -66,8 +66,6 @@ var doc = function(codeSessionId){
 };
 
 doc.prototype.receive = function(data) {
-  console.log(data.operation + " before convert");
-
   var operation = this.server.receiveOperation(data.revision, data.operation);
   cocodojoDBObj.updateOperation(this.codeSessionId, operation, function() {
 
@@ -75,14 +73,9 @@ doc.prototype.receive = function(data) {
 }
 
 exports.sync = function(req, res) {
-  res.header("Access-Control-Allow-Origin", "*");
-  res.header("Access-Control-Allow-Headers", "X-Requested-With");
-
   var codeSessionId = req.params.codeSessionId;
   var revision = req.body.revision;
   var operation = ot.TextOperation.fromJSON(JSON.parse(req.body.operation));
-  console.log(revision);
-  console.log("first time " + operation);
   docs[codeSessionId].receive({
     revision: revision,
     operation: operation
@@ -91,8 +84,6 @@ exports.sync = function(req, res) {
 };
 
 exports.create = function(req, res) {
-  res.header("Access-Control-Allow-Origin", "*");
-  res.header("Access-Control-Allow-Headers", "X-Requested-With");
   var codeSessionId = req.params.codeSessionId;
   var newDoc = new doc(codeSessionId);
   docs[codeSessionId] = newDoc;
