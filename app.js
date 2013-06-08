@@ -47,7 +47,7 @@ http.createServer(app).listen(5000, function(){
 
 var editorServer = null;
 var io = require('socket.io').listen(3333);
-io.set('origins', '*');
+io.set('origins', '*:*');
 io.sockets.on('connection', function (socket) {
 
   socket.emit('doneConnection', { message: 'hello' });
